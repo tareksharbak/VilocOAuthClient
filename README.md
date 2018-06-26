@@ -1,0 +1,2 @@
+A .NET Core application that provides a simple example of a client that uses the Viloc API and authenticates using username and password, or refresh tokens. The example also includes logic to persist the token so the users won't have to provide their username and password all the time.
+You need to provide the API BaseUri, ClientId, and ClientSecret in the program.cs file.
