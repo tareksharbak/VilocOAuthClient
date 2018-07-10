@@ -28,7 +28,7 @@ namespace OAuthClientViloc
 
 			this.persistingService = persistingService;
 			
-			token = persistingService?.LoadAsync().Result;
+			token = persistingService?.LoadAsync()?.Result;
 		}
 
 		public async Task<ApiResult> RegisterUserAsync(string token, string username, string password)
@@ -37,7 +37,6 @@ namespace OAuthClientViloc
 			{
 				UserName = username,
 				Password = password,
-				ConfirmPassword = password,
 				Token = token
 			};
 			return await PostJsonAsync(authBaseUri, "api/Account/Register", userModel, null);
@@ -59,7 +58,8 @@ namespace OAuthClientViloc
 				var newToken = JsonConvert.DeserializeObject<AuthTokenApiModel>(response.Content);
 				token = newToken;
 
-				await persistingService?.StoreAsync(token);
+				if (persistingService != null)
+					await persistingService.StoreAsync(token);
 			}
 			else
 				throw new UnauthorizedAccessException(response.Content);
@@ -105,7 +105,8 @@ namespace OAuthClientViloc
 			{
 				token = JsonConvert.DeserializeObject<AuthTokenApiModel>(response.Content);
 
-				await persistingService?.StoreAsync(token);
+				if (persistingService != null)
+					await persistingService.StoreAsync(token);
 			}
 			else
 			{
